@@ -17,14 +17,52 @@ class ListArray : public List<T> {
 
     public:
 	ListArray::ListArray(){
-	T* arr =new T a[MINSIZE];
-		n=MINSIZE;
-		max=n;	
+	 arr =new T [MINSIZE];
+		n=0;
+		max=MINSIZE;	
+			};//esto crea el objeto inicalizado a 2 y s
+	~ListArray(){
+	delete arr;
 	}
-	
+
+	T operator[](int pos)
+	{
+		T s=get(pos);	
+       		return s;
+         }
+friend std::ostream& operator<<(std::ostream &out, const ListArray<T> &list){
+
+
+
+
+
+}
+T get (int pos) override final{
+ if(pos=>size()){
+         throw std::out_of_range("fuera del intervalo[0-size()-1]");
+         }
+        else {
+		
+                 return *(arr+pos); }
+}
+
+void resize(int new_size){
+
+}
+
+
+int size() override final{
+return max;
+}
+		
+
+
+
+
+		};
+
 
 	
 	
 	// miembros públicos, incluidos los heredados de List<T>
     
-};
