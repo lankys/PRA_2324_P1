@@ -113,7 +113,8 @@ class ListArray : public List<T> {
 			if( *(arr+(max-1))!=0){
 			throw std::out_of_range("perdon esa posicion esta ocupada ");
 			}	
-			else{*(arr+n)=e;
+			else{
+				*(arr+n)=e;
 			n++;
 			}
 				}}
