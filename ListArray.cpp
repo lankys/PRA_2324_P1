@@ -8,23 +8,23 @@ private:
 	T* arr;
 	//puntero al inicio del array (forma contigua)son tipo t genricos
 	int max;
-	//tamaÃ±o actual del array
+	//tamaño actual del array
 	int n;
 	//numero de elementos de la lista
 	static const int MINSIZE = 2;
-	//tamaÃ±o minimo del array debe inicializarse a 2
+	//tamaño minimo del array debe inicializarse a 2
 	void resize(int new_size) {
-	
 		T* att;
+		T* aux;
 		att = new T[new_size];
 		for (int i = 0; i < n; i++) {
 			*(att + i) = *(arr + i);
 		}
-		
-		delete []arr;
+		aux = arr;
 		arr = att;
-		max = new_size;
 		delete att;
+		delete aux;
+		max = new_size;
 
 	}
 
@@ -77,7 +77,7 @@ public:
 
 	//get the position
 	T get(int pos) override final {
-		if (pos >= max ){
+		if (pos >= size()) {
 			throw std::out_of_range("fuera del intervalo[0-size()-1]");
 		}
 		else {
@@ -89,26 +89,21 @@ public:
 	//para insertar un elemnto a la cola  
 	//configurar
 	void insert(int pos, T e)  override final {
+		if (pos >= size()) {
+			throw std::out_of_range("fuera del intervalo[0-size()-1]");
+		}
+
 		if (n == max) {
 			resize(n * 2);
 			*(arr + pos) = e;
-			n+1;
+			n + 1;
 		}
 		else {
-			if (pos == 0) {
-				prepend(e);
+			for (int i = 0; i < (n - 1 - pos); i++) {
+				*(arr + n - i - 1) = *(arr + n - i);
 			}
-			if (pos == n) {
-				append(e);
-			}
-			else
-			{
-				for (int i = 0; i < (n - 1 - pos); i++) {
-					*(arr + n - i - 1) = *(arr + n - i);
-				}
-				*(arr + pos) = e;
-				n++;
-			}
+			*(arr + pos) = e;
+			n++;
 		}
 	}
 
@@ -182,7 +177,7 @@ public:
 
 
 	//mira si la lista esta vacia
-	bool empty()const override  {
+	bool empty()const override {
 		if (n == 0) {
 			return true;
 		}
