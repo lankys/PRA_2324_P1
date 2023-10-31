@@ -14,17 +14,14 @@ private:
 	static const int MINSIZE = 2;
 	//tamaño minimo del array debe inicializarse a 2
 	void resize(int new_size) {
-	
-		T* att;
-		att = new T[new_size];
+
+		T* att = new T[new_size];
 		for (int i = 0; i < n; i++) {
 			*(att + i) = *(arr + i);
 		}
-		
-		delete []arr;
+		delete [] arr;
 		arr = att;
 		max = new_size;
-		delete att;
 
 	}
 
@@ -35,17 +32,30 @@ public:
 		return n;
 	}
 
+
+    void insert(int pos, T e) {
+	if (pos < 0 || pos > n) {
+	throw std::out_of_range("fuera del intervalo de 0 a size()");}
+
+	else{
+	for (int i = n; i >= pos + 1; i--) {
+
+	arr[i] = arr[i - 1];}
+		arr[pos] = e;
+		n++;
+		}}
+
 	//constructor
 	ListArray() {
 		arr = new T[MINSIZE];
 		n = 0;
 		max = MINSIZE;
-	};//esto crea el objeto inicalizado a 2 y s
+	}//esto crea el objeto inicalizado a 2 y s
 
 	//destructor
 	~ListArray() {
 
-		delete[] arr;
+		delete arr;
 	}
 
 
@@ -53,7 +63,7 @@ public:
 	T operator[](int pos)
 	{
 		if (pos >= size()) {
-			throw std::out_of_range("fuera del intervalo[0-size()-1]");
+			throw std::out_of_range("fuera del intervalot[0-size()-1]");
 		}
 
 		return get(pos);
@@ -64,7 +74,7 @@ public:
 	//el operador<<
 	friend std::ostream& operator<<(std::ostream& out, const ListArray<T>& list) {
 		out << "[";
-		for (size_t i = 0; i < list.max; ++i) {
+		for (size_t i = 0; i < list.n; ++i) {
 			out << list.arr[i];
 			if (i < list.n - 1) {
 				out << ", ";
@@ -77,42 +87,16 @@ public:
 
 	//get the position
 	T get(int pos) override final {
-		if (pos >= max ){
-			throw std::out_of_range("fuera del intervalo[0-size()-1]");
+		if ( pos < 0) {
+			throw std::out_of_range("fuera del intervalooo[0-size()-1]");
 		}
 		else {
-			return *(arr + pos);
+			return arr[pos];
 		}
 	}
 
 
-	//para insertar un elemnto a la cola  
-	//configurar
-	void insert(int pos, T e)  override final {
-		if (n == max) {
-			resize(n * 2);
-			*(arr + pos) = e;
-			n+1;
-		}
-		else {
-			if (pos == 0) {
-				prepend(e);
-			}
-			if (pos == n) {
-				append(e);
-			}
-			else
-			{
-				for (int i = 0; i < (n - 1 - pos); i++) {
-					*(arr + n - i - 1) = *(arr + n - i);
-				}
-				*(arr + pos) = e;
-				n++;
-			}
-		}
-	}
-
-
+	
 	//buscador
 	int search(T e)const override final {
 
@@ -126,55 +110,33 @@ public:
 	}
 	//insert al final de la lista
 	void append(T e) override final {
-		if (n == max) {
+		if (n >= max - 1){
 			resize(n * 2);
-			*(arr + n) = e;
-			n++;
 		}
-		else {
-			*(arr + n) = e;
-			n++;
-		}
+		insert( n,e);
 	}
 
 	//inserta al inicio
 	void prepend(T e) override final {
-		if (n == max) {
-			resize((n * 2) - 1);
-			for (int i = 1; i < n; i++) {
-				*(arr + n) = *(arr + n - i);
-			}
-			*(arr) = e;
-			n++;
+		if (n >= max - 1) {
+			resize(n+1);
 		}
-		if (n == 0) {
-			*(arr) = e;
-			n++;
-		}
-		else {
-			for (int i = 1; i < n; i++) {
-				*(arr + n) = arr[n - i];
-			}
-			*(arr) = e;
-			n++;
-
-		}
+		insert(0, e);
 	}
 
 	//elimina y devuleve el elemnto que se encontraba en esa posicion
 	T remove(int pos) override final {
-
-		if (pos >= max) {
-			throw std::out_of_range("fuera del intervalo [0, size()-1])");
+		if ( pos < 0 || pos > n - 1) {
+			throw std::out_of_range("fuera del intervalo2 [0, size()-1])");
 		}
 		else {
 			T w;
 			w = get(pos);
-			n - 1;
-			delete(arr + pos);
-			for (int i = pos; i < n - 1 - pos; i++) {
+			for (int i = pos; i < n ; i++) {
 				*(arr + i) = arr[i + 1];
 			}
+			n--;
+
 			return w;
 
 		}
@@ -191,3 +153,6 @@ public:
 
 
 };
+
+
+/**//**//**/
